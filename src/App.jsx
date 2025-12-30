@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import InputView from './components/InputView';
-// Placeholders for other views
-const ListView = () => <div className="card"><p className="subheading">List View (Coming Soon)</p></div>;
-const DueView = () => <div className="card"><p className="subheading">Due Today (Coming Soon)</p></div>;
+import ListView from './components/ListView';
+import DueView from './components/DueView';
 
 function App() {
   const [activeTab, setActiveTab] = useState('input');
