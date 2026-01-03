@@ -4,10 +4,10 @@ import { getQuestions, deleteQuestion } from '../utils/storage';
 export default function ListView() {
     const [questions, setQuestions] = useState([]);
 
-    const loadQuestions = () => {
-        const data = getQuestions();
+    const loadQuestions = async () => {
+        const data = await getQuestions();
         // Sort by due date (soonest first)
-        data.sort((a, b) => a.nextDueDate - b.nextDueDate);
+        data.sort((a, b) => new Date(a.nextDueDate) - new Date(b.nextDueDate));
         setQuestions(data);
     };
 
@@ -19,9 +19,9 @@ export default function ListView() {
         return () => window.removeEventListener('storage-update', loadQuestions);
     }, []);
 
-    const handleDelete = (id) => {
+    const handleDelete = async (id) => {
         if (confirm('Stop tracking this question?')) {
-            deleteQuestion(id);
+            await deleteQuestion(id);
             loadQuestions(); // Force re-render
         }
     };

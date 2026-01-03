@@ -5,12 +5,12 @@ export default function InputView() {
     const [questionName, setQuestionName] = useState('');
     const [message, setMessage] = useState({ type: '', text: '' });
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         if (!questionName.trim()) return;
 
         try {
-            addQuestion(questionName.trim());
+            await addQuestion(questionName.trim());
             setMessage({ type: 'success', text: `Added "${questionName}" to your tracking list.` });
             setQuestionName('');
 

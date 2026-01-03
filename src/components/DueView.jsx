@@ -7,13 +7,13 @@ export default function DueView() {
     const [currentReviewIndex, setCurrentReviewIndex] = useState(0);
     const [showAnswer, setShowAnswer] = useState(false); // In a real app, this might show hints/solutions
 
-    const loadDueQuestions = () => {
-        const allQuestions = getQuestions();
+    const loadDueQuestions = async () => {
+        const allQuestions = await getQuestions();
         const now = Date.now();
         // Filter questions due now or in the past
         // Also include questions that are due strictly "Updated Today" if we were doing date-only check
         // But timestamp check is fine for now.
-        const due = allQuestions.filter(q => q.nextDueDate <= now);
+        const due = allQuestions.filter(q => new Date(q.nextDueDate).getTime() <= now);
         setDueQuestions(due);
         setCurrentReviewIndex(0);
         setShowAnswer(false);
@@ -25,7 +25,7 @@ export default function DueView() {
         return () => window.removeEventListener('storage-update', loadDueQuestions);
     }, []);
 
-    const handleRate = (quality) => {
+    const handleRate = async (quality) => {
         const question = dueQuestions[currentReviewIndex];
         if (!question) return;
 
@@ -34,7 +34,7 @@ export default function DueView() {
         const nextDueDate = getNextDueDateTimestamp(interval);
 
         // Save
-        updateQuestion(question.id, {
+        await updateQuestion(question._id || question.id, {
             interval,
             repetitions,
             easeFactor,
@@ -43,7 +43,7 @@ export default function DueView() {
 
         // Move to next
         // Slicing the array is better so we don't re-review the same one instantly
-        const remaining = dueQuestions.filter(q => q.id !== question.id);
+        const remaining = dueQuestions.filter(q => (q._id || q.id) !== (question._id || question.id));
         setDueQuestions(remaining);
 
         // Reset state
