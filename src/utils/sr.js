@@ -1,44 +1,46 @@
 /**
- * SuperMemo-2 (SM-2) Algorithm Implementation
+ * Interview Prep Spaced Repetition Algorithm
+ * Simplified schedule: New -> 3d -> 7d -> 14d -> 30d -> 60d
  * 
  * @param {object} params
  * @param {number} params.interval - Current interval in days
- * @param {number} params.repetitions - Current repetition count
- * @param {number} params.easeFactor - Current ease factor
- * @param {number} quality - 0-5 rating (we will map UI buttons to this: Hard=3, Good=4, Easy=5)
+ * @param {number} params.repetitions - Current streak (level)
+ * @param {number} quality - 3=Hard(Reset), 4=Good, 5=Easy(Bonus?)
  * 
  * @returns {object} { interval, repetitions, easeFactor }
  */
-export const calculateNextReview = ({ interval, repetitions, easeFactor }, quality) => {
-    let nextInterval;
-    let nextRepetitions;
-    let nextEaseFactor;
 
-    if (quality >= 3) {
-        // Correct response
-        if (repetitions === 0) {
-            nextInterval = 1;
-        } else if (repetitions === 1) {
-            nextInterval = 6;
-        } else {
-            nextInterval = Math.round(interval * easeFactor);
-        }
-        nextRepetitions = repetitions + 1;
-    } else {
-        // Incorrect response (reset)
+// The "Ideal" Interview Application Schedule
+const SCHEDULE = [1, 3, 7, 14, 30, 60];
+
+export const calculateNextReview = ({ repetitions }, quality) => {
+    let nextRepetitions;
+    let nextInterval;
+
+    // "Hard" (3) -> Reset progress (or drop back)
+    // In this simplified view, let's say "Hard" means you forgot, so reset to Day 1 review.
+    if (quality === 3) {
         nextRepetitions = 0;
         nextInterval = 1;
     }
+    // "Good" (4) or "Easy" (5) -> Advance level
+    else {
+        // Bonus: If Easy (5), skip a level (Speed Bonus)
+        const bonus = quality === 5 ? 2 : 1;
+        nextRepetitions = repetitions + bonus;
 
-    // Update Ease Factor
-    // EF' = EF + (0.1 - (5 - q) * (0.08 + (5 - q) * 0.02))
-    nextEaseFactor = easeFactor + (0.1 - (5 - quality) * (0.08 + (5 - quality) * 0.02));
-    if (nextEaseFactor < 1.3) nextEaseFactor = 1.3;
+        // Cap at the end of the schedule
+        if (nextRepetitions >= SCHEDULE.length) {
+            nextInterval = SCHEDULE[SCHEDULE.length - 1]; // Max out at 60 days
+        } else {
+            nextInterval = SCHEDULE[nextRepetitions];
+        }
+    }
 
     return {
         interval: nextInterval,
         repetitions: nextRepetitions,
-        easeFactor: nextEaseFactor
+        easeFactor: 2.5 // Unused in this simple version, kept for schema compatibility
     };
 };
 
@@ -48,9 +50,6 @@ export const calculateNextReview = ({ interval, repetitions, easeFactor }, quali
  * @returns {number} Timestamp
  */
 export const getNextDueDateTimestamp = (daysToAdd) => {
-    const now = new Date();
-    now.setHours(0, 0, 0, 0); // Normalize to start of day? Or keep exact time? 
-    // Let's keep strict 24h intervals for now, or just add days.
     const oneDay = 24 * 60 * 60 * 1000;
     return Date.now() + (daysToAdd * oneDay);
 };
