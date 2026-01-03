@@ -1,16 +1,72 @@
-# React + Vite
+# LeetCode Spaced Repetition Tracker
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A Full-Stack **MERN** application designed to help software engineers master LeetCode questions using **Spaced Repetition**.
 
-Currently, two official plugins are available:
+![License](https://img.shields.io/badge/license-MIT-blue.svg)
+![Stack](https://img.shields.io/badge/stack-MERN-green.svg)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Features
 
-## React Compiler
+- **Spaced Repetition Algorithm**: Custom interval schedule tailored for interview prep (`1d -> 3d -> 7d -> 14d -> 30d`).
+- **Review System**:
+    - **Good**: Advances 1 level.
+    - **Easy**: **Speed Bonus** (Skips a level).
+    - **Hard**: Resets progress to Day 1.
+- **Dark Mode UI**: Clean, distraction-free aesthetic inspired by NeetCode.io.
+- **Full Stack Architecture**:
+    - **Frontend**: React + Vite
+    - **Backend**: Node.js + Express
+    - **Database**: MongoDB Atlas (Cloud)
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Tech Stack
 
-## Expanding the ESLint configuration
+- **Frontend**: React.js, Generic CSS (NeetCode Theme)
+- **Backend**: Express.js, Mongoose
+- **Database**: MongoDB
+- **Tooling**: Vite, Nodemon
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Installation & Run
+
+1.  **Clone the repository**:
+    ```bash
+    git clone https://github.com/yourusername/leetcode-sr.git
+    cd leetcode-sr
+    ```
+
+2.  **Install Dependencies**:
+    ```bash
+    # Install Root/Frontend deps
+    npm install
+    ```
+
+3.  **Configure Environment**:
+    Create a `.env` file in the root directory:
+    ```env
+    PORT=5000
+    MONGODB_URI=your_mongodb_connection_string_here
+    ```
+
+4.  **Start the Application**:
+    You need two terminals:
+
+    **Terminal 1 (Backend)**:
+    ```bash
+    node server/server.js
+    ```
+
+    **Terminal 2 (Frontend)**:
+    ```bash
+    npm run dev
+    ```
+
+## Spaced Repetition Logic
+
+This app uses a simplified interval schedule designed for rapid interview preparation:
+- **Level 1**: 1 Day
+- **Level 2**: 3 Days
+- **Level 3**: 7 Days
+- **Level 4**: 14 Days
+- **Level 5**: 30 Days
+- **Level 6**: 60 Days
+
+*Marking a question as "Hard" resets it to Level 1. Marking "Easy" skips a level*
