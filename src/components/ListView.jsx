@@ -27,10 +27,11 @@ export default function ListView() {
     };
 
     const getStatus = (dueDate) => {
+        const target = new Date(dueDate).getTime();
         const now = Date.now();
-        if (dueDate <= now) return { text: 'Due', color: 'var(--accent-blue)' }; // or red/yellow?
+        if (target <= now) return { text: 'Due', color: 'var(--accent-blue)' };
 
-        const diffHours = (dueDate - now) / (1000 * 60 * 60);
+        const diffHours = (target - now) / (1000 * 60 * 60);
         if (diffHours < 24) return { text: 'Tomorrow', color: 'var(--text-secondary)' };
 
         const days = Math.round(diffHours / 24);
@@ -61,8 +62,9 @@ export default function ListView() {
             ) : (
                 questions.map(q => {
                     const status = getStatus(q.nextDueDate);
+                    const id = q._id || q.id;
                     return (
-                        <div key={q.id} style={{
+                        <div key={id} style={{
                             display: 'grid',
                             gridTemplateColumns: 'minmax(200px, 1fr) 120px 80px',
                             padding: '1rem 1.5rem',
@@ -83,7 +85,7 @@ export default function ListView() {
                             </div>
                             <div style={{ textAlign: 'right' }}>
                                 <button
-                                    onClick={() => handleDelete(q.id)}
+                                    onClick={() => handleDelete(id)}
                                     style={{
                                         background: 'none',
                                         border: 'none',
