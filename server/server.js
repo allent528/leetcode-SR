@@ -5,7 +5,11 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import questionsRouter from './routes/api.js';
 
-dotenv.config();
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+dotenv.config({ path: path.join(__dirname, '../.env') });
 
 const app = express();
 const PORT = process.env.PORT || 5000;
