@@ -27,11 +27,20 @@ export default function ListView() {
     };
 
     const getStatus = (dueDate) => {
-        const target = new Date(dueDate).getTime();
-        const now = Date.now();
-        if (target <= now) return { text: 'Due', color: 'var(--accent-blue)' };
+        const targetDate = new Date(dueDate);
+        const target = targetDate.getTime();
+        const now = new Date();
 
-        const diffHours = (target - now) / (1000 * 60 * 60);
+        if (target <= now.getTime()) return { text: 'Due', color: 'var(--accent-blue)' };
+
+        if (targetDate.toDateString() === now.toDateString()) {
+            return {
+                text: `Today ${targetDate.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}`,
+                color: 'var(--text-primary)'
+            };
+        }
+
+        const diffHours = (target - now.getTime()) / (1000 * 60 * 60);
         if (diffHours < 24) return { text: 'Tomorrow', color: 'var(--text-secondary)' };
 
         const days = Math.round(diffHours / 24);

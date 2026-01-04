@@ -13,7 +13,12 @@ export default function DueView() {
         // Filter questions due now or in the past
         // Also include questions that are due strictly "Updated Today" if we were doing date-only check
         // But timestamp check is fine for now.
-        const due = allQuestions.filter(q => new Date(q.nextDueDate).getTime() <= now);
+        const due = allQuestions.filter(q => {
+            const dueTime = new Date(q.nextDueDate).getTime();
+            const dueDate = new Date(q.nextDueDate);
+            const today = new Date();
+            return dueTime <= today.getTime() || dueDate.toDateString() === today.toDateString();
+        });
         setDueQuestions(due);
         setCurrentReviewIndex(0);
         setShowAnswer(false);
