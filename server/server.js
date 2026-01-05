@@ -28,6 +28,14 @@ mongoose.connect(MONGODB_URI)
 // Routes
 app.use('/questions', questionsRouter);
 
+// Serve static files from the React frontend app
+app.use(express.static(path.join(__dirname, '../dist')));
+
+// Anything that doesn't match the above, send back index.html
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '../dist/index.html'));
+});
+
 // Start Server
 app.listen(PORT, () => {
     console.log(`🚀 Server running on http://localhost:${PORT}`);
