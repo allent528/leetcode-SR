@@ -11,7 +11,7 @@
  */
 
 // The "Ideal" Interview Application Schedule
-const SCHEDULE = [1, 3, 7, 14, 30, 60];
+const SCHEDULE = [1, 2, 4, 7, 15, 30];
 
 export const calculateNextReview = ({ repetitions }, quality) => {
     let nextRepetitions;
@@ -32,8 +32,10 @@ export const calculateNextReview = ({ repetitions }, quality) => {
         // Cap at the end of the schedule
         if (nextRepetitions >= SCHEDULE.length) {
             nextInterval = SCHEDULE[SCHEDULE.length - 1]; // Max out at 60 days
+        } else if (nextRepetitions > 0) {
+            nextInterval = SCHEDULE[nextRepetitions - 1];
         } else {
-            nextInterval = SCHEDULE[nextRepetitions];
+            nextInterval = SCHEDULE[0]; // Fallback, shouldn't happen for Good/Easy
         }
     }
 
